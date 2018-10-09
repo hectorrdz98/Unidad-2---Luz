@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    -webkit-transition: all 0.5s;
+}
+
+body {
+    overflow: hidden;
+}
+
+#cont_bl {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    transform: translateX(0px);
+}
+
+#barra_lateral {
+	width: 250px; 
+	height: 100vh; 
+	background-color: #000d1a; 
+}
+
+#titulo {
+	height: calc(10% - 1px);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	font-variant: small-caps;
+	font-size: 25px;
+	letter-spacing: 1px;
+}
+
+#herramientas {
+	/*height: 40%;*/
+}
+
+#h_botones {
+	height: 50px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.h_cont_boton {
+	width: 20%;
+	height: 80%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.h_cont_boton span{
+	color: rgb(150,150,150);
+	cursor: pointer;
+}
+
+.h_cont_boton span:hover{
+	color: white;
+}
+
+.separador {
+	height: 1px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.separador div{
+	width: 80%;
+	height: 100%;
+	border-radius: 25px;
+	background-color: white;
+}
+
+.encabezados_secciones {
+	color: white;
+	font-size: 12px;
+	margin-left: 20px;
+	margin-bottom: 10px;
+}
+
+.seccion {
+	margin-bottom: 20px;
+}
+
+.sub_seccion {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	color: white;
+	font-size: 12px;
+	margin-bottom: 5px;
+	margin-left: 20px;
+}
+
+.sub_seccion p {
+	width: 50px;
+}
+
+.sub_seccion input {
+	margin-left: 10px;
+	text-decoration: none;
+	background-color: none;
+}
+
+#footer {
+	height: 10%;
+}
+
+
+
+
+/* Barra lateral */
+
+#btn_ocultar_bl {
+    width: 50px;
+    height: 50px;
+    background-color: #000d1a;
+    border-radius: 25px 0px 0px 25px;
+    opacity: 0;    /* 0 por defecto */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#btn_ocultar_bl:hover {
+    opacity: 1;
+}
+
+.pleft{
+    /* 45deg top  -  225deg bottom */
+    transform: rotate(45deg);
+}
+
+.pright{
+    /* 45deg top  -  225deg bottom */
+    transform: rotate(225deg);
+}
+
+#btn_ocultar_bl:hover > .pleft{
+    /* 0deg left  -  180deg right */
+    transform: rotate(0deg);
+}
+
+#btn_ocultar_bl:hover > .pright{
+    /* 0deg left  -  180deg right */
+    transform: rotate(180deg);
+}
+
+#barra_lateral:hover ~ #btn_ocultar_bl {
+    opacity: 1;
+}
