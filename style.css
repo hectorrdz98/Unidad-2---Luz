@@ -11,7 +11,53 @@ body {
     overflow: hidden;
 }
 
-#cont_bl {
+#cont_bl_izq {
+	position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    transform: translateX(0px);
+}
+
+#areaElementosBita {
+	width: 100%;
+}
+
+.elementoBita {
+	font-size: 14px;
+	color: white;
+	width: calc(100% - 40px - 10px);
+	padding: 10px 5px;
+	margin: 20px;
+	border-radius: 5px;
+	cursor: pointer;
+	/* 0 defecto, 0.2 activo */
+	background-color: rgba(255,255,255,0); 
+}
+
+.elementoBita:hover {
+	background-color: rgba(255,255,255,0.1) !important;
+}
+
+.elementoBita div {
+	width: 80%;
+}
+
+.detallesMaterialBita {
+	display: flex;
+	align-items: center;
+}
+
+.detallesMaterialBita div {
+	width: 15px;
+	height: 15px;
+	margin-right: 10px;
+	background: dimgray;
+	border-radius: 2px;
+}
+
+#cont_bl_der {
     position: absolute;
     right: 0;
     top: 0;
@@ -65,7 +111,7 @@ body {
 }
 
 .h_cont_boton span:hover{
-	color: white;
+	color: white !important;
 }
 
 .separador {
@@ -102,6 +148,7 @@ body {
 	font-size: 12px;
 	margin-bottom: 5px;
 	margin-left: 20px;
+	margin-right: 20px;
 }
 
 .sub_seccion p {
@@ -109,9 +156,16 @@ body {
 }
 
 .sub_seccion input {
+	width: 150px;
 	margin-left: 10px;
 	text-decoration: none;
 	background-color: none;
+}
+
+.sub_seccion select {
+	width: 150px;
+	margin-left: 10px;
+	background-color: white;
 }
 
 #footer {
@@ -127,7 +181,6 @@ body {
     width: 50px;
     height: 50px;
     background-color: #000d1a;
-    border-radius: 25px 0px 0px 25px;
     opacity: 0;    /* 0 por defecto */
     cursor: pointer;
     display: flex;
@@ -161,4 +214,12 @@ body {
 
 #barra_lateral:hover ~ #btn_ocultar_bl {
     opacity: 1;
+}
+
+.roundedright {
+	border-radius: 25px 0px 0px 25px;
+}
+
+.roundedleft {
+	border-radius: 0px 25px 25px 0px;
 }
