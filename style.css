@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c');
 
+::-webkit-scrollbar { 
+    display: none; 
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -41,7 +45,7 @@ body {
 }
 
 .elementoBita div {
-	width: 80%;
+	width: 100%;
 }
 
 .detallesMaterialBita {
@@ -71,6 +75,7 @@ body {
 	width: 250px; 
 	height: 100vh; 
 	background-color: #000d1a; 
+	overflow-y: scroll;
 }
 
 #titulo {
@@ -91,6 +96,7 @@ body {
 #h_botones {
 	height: 50px;
 	width: 100%;
+	padding: 10px 0px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -112,6 +118,10 @@ body {
 
 .h_cont_boton span:hover{
 	color: white !important;
+}
+
+#agregarLaser:hover {
+	background-color: rgb(170,170,170) !important;
 }
 
 .separador {
@@ -170,6 +180,26 @@ body {
 
 #footer {
 	height: 10%;
+	position: fixed;
+	bottom: 0;
+	width: 250px;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.btn_bl {
+	width: 30%;
+    text-align: center;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #000d1a;
+    font-size: 12px;
+}
+
+.btn_bl:hover {
+	background-color: rgb(170,170,170) !important;
 }
 
 

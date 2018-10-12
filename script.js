@@ -4,6 +4,8 @@ var escalaCanvas = 20;
 var rectsAgregados = {};
 var lasersAgregados = {};
 
+var materialExterior = "Aire";
+
 // Funciones de p5.js
 
 function setup() {
@@ -14,6 +16,7 @@ function setup() {
 function draw() {
     clear();
     angleMode(DEGREES);
+    background(indicesRefraccion[materialExterior][1]);
     for (var i = 0; i<=maxTamCanvas; i=i+escalaCanvas) {
         stroke(245, 245, 245);
         line(0, i, maxTamCanvas, i);
@@ -50,12 +53,38 @@ function draw() {
     		var posY = rectsAgregados[lasersAgregados[key][0]][1];
     		var x0 = (rectsAgregados[lasersAgregados[key][0]][0] + parseInt(rectsAgregados[lasersAgregados[key][0]][2]/2)) 
     				- (tan(lasersAgregados[key][1]) * rectsAgregados[lasersAgregados[key][0]][1]);
-    		var ang2 = asin((1 * sin(lasersAgregados[key][1])) / indicesRefraccion[rectsAgregados[lasersAgregados[key][0]][4]][0]);
+    		var ang2 = asin((indicesRefraccion[materialExterior][0] * sin(lasersAgregados[key][1])) / indicesRefraccion[rectsAgregados[lasersAgregados[key][0]][4]][0]);
     		var catO2 = tan(ang2)*height;
-    		var angY = asin((indicesRefraccion[rectsAgregados[lasersAgregados[key][0]][4]][0] * sin(ang2)) / 1);
+    		var angY = asin((indicesRefraccion[rectsAgregados[lasersAgregados[key][0]][4]][0] * sin(ang2)) / indicesRefraccion[materialExterior][0]);
     		var catO3 = tan(angY)*(2000-posY-height);
-    		console.log(catO3);
-    		console.log("Ang Refractado: " + angY);
+
+    		var ang2Show;
+    		var angYShow;
+
+    		if (ang2 % 1 != 0) ang2Show = ang2.toFixed(4);
+    		else ang2Show = ang2;
+
+    		if (angY % 1 != 0) angYShow = angY.toFixed(4);
+    		else angYShow = angY;
+
+    		var textoDetalles = `
+    			<div>
+    				<p>Ángulo incidente 1: ` + lasersAgregados[key][1] + `</p>
+    				<p>Ángulo reflejado 1: ` + lasersAgregados[key][1] + `</p>
+    				<p>Ángulo refractado 1: ` + ang2Show + `</p>
+    			</div>
+    			<div>
+    				<p>Ángulo incidente 2: ` + ang2Show + `</p>
+    				<p>Ángulo reflejado 2: ` + ang2Show + `</p>
+    				<p>Ángulo refractado 2: ` + angYShow + `</p>
+    			</div>
+    		`;
+
+    		$(("#"+key)+" #detallesLaser").empty();
+			$(("#"+key)+" #detallesLaser").append(textoDetalles);
+
+    		/*$(("#"+elementoSeleccionado)+" #detallesLaser").empty();
+			$(("#"+elementoSeleccionado)+" #detallesLaser").append(textoDetalles);*/
     		
     		// Recta normal
     		stroke(175,175,175)
@@ -92,15 +121,16 @@ function draw() {
     			((posX+parseInt(width/2))+catO2),
     			(height+posY)
     		);
-
-    		// Re-Refractada
-    		stroke(lasersAgregados[key][2]);
-    		line(
-    			((posX+parseInt(width/2))+catO2),
-    			(height+posY),
-    			(((posX+parseInt(width/2))+catO2)+catO3),
-    			2000
-    		);
+    		if (catO2<parseInt(width/2)) {
+    			// Re-Refractada
+	    		stroke(lasersAgregados[key][2]);
+	    		line(
+	    			((posX+parseInt(width/2))+catO2),
+	    			(height+posY),
+	    			(((posX+parseInt(width/2))+catO2)+catO3),
+	    			2000
+	    		);
+    		}
     		
     	}
     }
@@ -148,6 +178,8 @@ function addLaser(nombre) {
 	      	<div class="detallesMaterialBita">
 	      		<div></div>
 	      		<p id="` + nombre + `_p">` + nombre + `</p>
+	      	</div>
+	      	<div id="detallesLaser" style="padding-left: 10px; width: calc(100% - 10px); font-size: 12px; margin-top: 10px;">
 	      	</div>
 	    </div>
 	`;
@@ -282,6 +314,46 @@ function crearDetallesLaser(nombre) {
 	$("#detalles").append(htmlDetalles);
 }
 
+function crearDetallesGlobales() {
+	var htmlDetalles = `
+		<div>
+		    <p id="tipo_elemento" class="encabezados_secciones">Detalles del exterior<p>
+		    <div class="seccion">
+		      	<div class="sub_seccion">
+		      		<p>Material</p>
+		      		<select id="selectTipoMaterialDetGlobal"> `;
+
+		      		for (key in indicesRefraccion) {
+
+		      			htmlDetalles += `
+		      				<option value="` + 
+		      					key
+		      				+ `"`;
+
+		      			if (key == materialExterior) {
+		      				htmlDetalles += ` selected`;
+		      			}
+
+		      			htmlDetalles += `>` + key +`</option>`;
+		      		}
+
+		htmlDetalles += `
+		      		</select>
+		      	</div>
+		      	<div class="sub_seccion">
+		      		<p id="indiceRefraccionDetGlobal" style="width: 150px;">
+		      			Índice de refracción: ` + 
+		      				indicesRefraccion[materialExterior][0] + `
+		      		</p>
+		      	</div>
+		    </div>
+		</div>
+	`;
+
+	$("#detalles").empty();
+	$("#detalles").append(htmlDetalles);
+}
+
 /*function colocarTodoGris() {
 	// Colocar cada ícono del menu en gris
 	$(".h_cont_boton span").css("color", "rgb(150,150,150)");
@@ -309,11 +381,27 @@ var indicesRefraccion = {
 
 $("#agregarRect").on({
 	click: function () {
-		if ($("#agregarRect span:first-child").css("color") != "rgb(255, 255, 255)") {
+		if (herramientaSeleccionada != "rect") {
 			$("#agregarRect span:first-child").css("color", "white");
+			$("#flecha svg path").css("fill", "rgb(150,150,150)");
 			herramientaSeleccionada = "rect";
-		} else if ($("#agregarRect span:first-child").css("color") == "rgb(255, 255, 255)") {
+		} else if (herramientaSeleccionada == "rect") {
 			$("#agregarRect span:first-child").css("color", "rgb(150,150,150)");
+			$("#flecha svg path").css("fill", "white");
+			herramientaSeleccionada = "seleccionar";
+		}
+	}
+});
+
+$("#flecha").on({
+	click: function () {
+		if (herramientaSeleccionada != "rect") {
+			$("#agregarRect span:first-child").css("color", "white");
+			$("#flecha svg path").css("fill", "rgb(150,150,150)");
+			herramientaSeleccionada = "rect";
+		} else if (herramientaSeleccionada == "rect") {
+			$("#agregarRect span:first-child").css("color", "rgb(150,150,150)");
+			$("#flecha svg path").css("fill", "white");
 			herramientaSeleccionada = "seleccionar";
 		}
 	}
@@ -321,7 +409,8 @@ $("#agregarRect").on({
 
 $("#agregarLaser").on({
 	click: function () {
-		herramientaSeleccionada = "laser";
+		addLaser(("Laser" + contLaser));
+		contLaser++;
 	}
 });
 
@@ -329,9 +418,9 @@ $(document).on('click', 'canvas', function() {
 	if (herramientaSeleccionada == "rect") {
 		addRect(("Superficie" + cont), mouseX, mouseY, 500, 200);
 		cont++;
-	} else if (herramientaSeleccionada == "laser") {
-		addLaser(("Laser" + contLaser));
-		contLaser++;
+	} if (herramientaSeleccionada != "rect") {
+		$(("#" + elementoSeleccionado)).css("background-color", "rgba(255,255,255,0)");
+		crearDetallesGlobales();
 	}
 });
 
@@ -390,6 +479,14 @@ $(document).on('change', '#selectTipoMaterialDet', function() {
 	redraw();
 });
 
+$(document).on('change', '#selectTipoMaterialDetGlobal', function() {
+	materialExterior = $("#selectTipoMaterialDetGlobal option:selected").text();
+	$("#indiceRefraccionDetGlobal").text(
+		("Índice de refracción: " + indicesRefraccion[materialExterior][0])
+	);
+	redraw();
+});
+
 $(document).on('keyup', '#inputNombreDet2', function() {
 	if ($(this).val() != "" && $(this).val() != elementoSeleccionado) {
 		lasersAgregados[$(this).val()] = lasersAgregados[elementoSeleccionado];
@@ -417,4 +514,46 @@ $(document).on('keyup', '#inputAnguloDet2', function() {
 		}
 		
 	}
+});
+
+
+$(".flechaLeft").on({
+	click: function () {
+		elementoAct = $(this).attr("id");
+		if ($(this).parent().css("transform") == "matrix(1, 0, 0, 1, 0, 0)") {
+			$(this).parent().css("transform", "translateX(-250px)");
+			$("#svgleft").attr("class", 'pright');
+		} else if ($(this).parent().css("transform") == "matrix(1, 0, 0, 1, -250, 0)") {
+			$(this).parent().css("transform", "translateX(0px)");
+			$("#svgleft").attr("class", 'pleft');
+		}
+	}
+});
+
+$(".flechaRight").on({
+	click: function () {
+		elementoAct = $(this).attr("id");
+		if ($(this).parent().css("transform") == "matrix(1, 0, 0, 1, 0, 0)") {
+			$(this).parent().css("transform", "translateX(250px)");
+			$("#svgright").attr("class", 'pleft');
+		} else if ($(this).parent().css("transform") == "matrix(1, 0, 0, 1, 250, 0)") {
+			$(this).parent().css("transform", "translateX(0px)");
+			$("#svgright").attr("class", 'pright');
+		}
+	}
+});
+
+$("#eliminarTodo").on({
+	click: function () {
+		rectsAgregados = {};
+		lasersAgregados = {};
+		$("#detalles").empty();
+		$("#areaElementosBita").empty();
+		redraw();
+	}
+});
+
+
+$( document ).ready(function() {
+    crearDetallesGlobales();
 });
